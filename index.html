@@ -380,6 +380,12 @@ modelo |&gt;  aov()|&gt; summary()</code></pre>
 ## Residuals   198   7235      37                   
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<pre class="r"><code>SCR &lt;- (0.281^2)*var(edad)*(200-1);SCR</code></pre>
+<pre><code>## [1] 3299.098</code></pre>
+<pre class="r"><code>SCT &lt;- var(gastos)*(200-1);SCT</code></pre>
+<pre><code>## [1] 10536.64</code></pre>
+<pre class="r"><code>SCE &lt;- var(gastos)*(200-1)-(0.281^2)*var(edad)*(200-1);SCE</code></pre>
+<pre><code>## [1] 7237.54</code></pre>
 </div>
 <div id="section-8" class="section level3">
 <h3>9</h3>

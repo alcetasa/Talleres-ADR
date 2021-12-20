@@ -190,6 +190,15 @@ library(broom)
 modelo |>  aov()|> summary()
 
 ```
+
+```{r}
+SCR <- (0.281^2)*var(edad)*(200-1);SCR
+SCT <- var(gastos)*(200-1);SCT
+SCE <- var(gastos)*(200-1)-(0.281^2)*var(edad)*(200-1);SCE #2
+```
+
+
+
 ###9
 Presente el análisis de varianza, redacte sus conclusiones con un nivel de significancia del 5%
 
