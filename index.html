@@ -243,7 +243,7 @@ head(datos)</code></pre>
 <pre class="r"><code>datos$sexo[datos$sexo==&quot;female&quot;] &lt;-&quot;femenino&quot;
 datos$sexo[datos$sexo ==&quot;male&quot;] &lt;- &quot;masculino&quot;
 datos$fuma[datos$fuma==&quot;yes&quot;] &lt;-&quot;si&quot;
-datos$fuma[datos$fuma==&quot;no&quot;] &lt;-&quot;no&quot;
+
 head(datos)</code></pre>
 <pre><code>##   edad      sexo    imc nhijos fuma gastos
 ## 1   19  femenino 27.900      0   si   7.59
@@ -305,10 +305,10 @@ tcalc &lt;- (r*sqrt(n-2)/sqrt(1-r^2))# Cálculo del estadístico-t</code></pre>
 <p>H0:ρ=0 ***</p>
 <p>H1:ρ≠0</p>
 <p>El estadístico de prueba :</p>
-<p><span class="math display">\[\displaystyle t_c = \frac{r \sqrt{(n-2)}}{\sqrt{1-r^2}}\\\]</span></p>
+<p><span class="math display">\[\displaystyle t_c = \frac{r \sqrt{(n-2)}}{\sqrt{1-r^2}}\\\]</span> #Hallando el Pvalor</p>
 <pre class="r"><code>2*pt(abs(tcalc),n-2,lower.tail = FALSE)</code></pre>
 <pre><code>## [1] 0.5538405</code></pre>
-<p>Intepretacion:</p>
+<p>Intepretacion: Existe evidencia estadistica para afirmar que la correlacion es significativa.</p>
 </div>
 <div id="section-4" class="section level3">
 <h3>5</h3>
@@ -396,6 +396,7 @@ modelo |&gt;  aov()|&gt; summary()</code></pre>
 <p>¿A cuánto asciende el valor estimado de σ²? ¿En qué unidades se encuentra establecida esta estimación?</p>
 <pre class="r"><code>summary(modelo)$sigma**2 # varianza</code></pre>
 <pre><code>## [1] 36.53929</code></pre>
+<p>unidades:(miles de dolares^2)</p>
 </div>
 <div id="section-10" class="section level3">
 <h3>11</h3>

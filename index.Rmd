@@ -66,7 +66,7 @@ c. Recodifique las categorías de la variable sexo como masculino y femenino, fu
 datos$sexo[datos$sexo=="female"] <-"femenino"
 datos$sexo[datos$sexo =="male"] <- "masculino"
 datos$fuma[datos$fuma=="yes"] <-"si"
-datos$fuma[datos$fuma=="no"] <-"no"
+
 head(datos)
 ```
 ###2
@@ -123,11 +123,13 @@ H1:ρ≠0
 El estadístico de prueba :
 
 $$\displaystyle t_c = \frac{r \sqrt{(n-2)}}{\sqrt{1-r^2}}\\$$
-
+#Hallando el Pvalor
 ```{r}
 2*pt(abs(tcalc),n-2,lower.tail = FALSE)
 ```
 Intepretacion:
+Existe evidencia estadistica para afirmar que la correlacion es significativa.
+
 
 ###5
 Se desea estudiar la influencia lineal de la edad sobre los gastos. Presente el modelo de regresión lineal simple estimado.
@@ -209,6 +211,8 @@ Existe suficiente evidencia estadística para indicar que existe una relación l
 ```{r}
 summary(modelo)$sigma**2 # varianza
 ```
+unidades:(miles de dolares^2)
+
 ###11
 
 Se desea estudiar la influencia lineal de las variables sobre los gastos. Presente el modelo de regresión lineal múltiple estimado.
