@@ -128,7 +128,7 @@ $$\displaystyle t_c = \frac{r \sqrt{(n-2)}}{\sqrt{1-r^2}}\\$$
 2*pt(abs(tcalc),n-2,lower.tail = FALSE)
 ```
 Intepretacion:
-Existe evidencia estadistica para afirmar que la correlacion es significativa.
+No existe evidencia estadistica para afirmar que la correlacion es significativa.
 
 
 ###5
