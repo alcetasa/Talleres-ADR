@@ -1,0 +1,241 @@
+---
+title: "TALLERES"
+author: "AlvaroTauma"
+date: "18 de diciembre de 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##TALLER 1 
+
+El archivo seguro.csv contiene datos referidos a pólizas de seguros adquiridas por 200 personas, de las cuales se registran los siguientes atributos:
+
+
+- age: Edad de la persona
+- sex: Sexo de la persona
+- bmi: Índice de masa corporal
+- children: Número de hijos menores de 12 años
+- smoker: Indicador de hábito de fumar (0: No, 1: Sí)
+- region: Región de residencia de la persona
+- charges: Monto mensual que paga, en dólares
+
+
+
+###Lectura de datos:
+```{r}
+datos <- read.csv("Taller1/seguro.csv",sep = ";")
+head(datos) 
+```
+
+
+
+```{r str, echo=T}
+str(datos)
+```
+###1
+Ejecute las siguientes tareas de preprocesamiento de datos:
+
+
+
+a. Retire la columna region
+
+```{r}
+datos <- datos[-6]
+head(datos)
+```
+b. Renombre las columnas como edad,sexo, imc, nhijos, fuma, gastos
+```{r}
+names(datos) <- c("edad","sexo","imc","nhijos","fuma","gastos")
+head(datos)
+```
+c. Recodifique las categorías de la variable sexo como masculino y femenino, fuma: sí y no
+```{r}
+datos$sexo[datos$sexo=="female"] <-"femenino"
+datos$sexo[datos$sexo =="male"] <- "masculino"
+datos$fuma[datos$fuma=="yes"] <-"si"
+datos$fuma[datos$fuma=="no"] <-"no"
+head(datos)
+```
+###2
+Obtenga la matriz de correlaciones de las variables cuantitativas y presente un gráfico que permita visualizarla
+
+
+```{r}
+datos[,c(1,3,4,6)] |> cor()
+```
+
+```{r echo=TRUE,eval=TRUE}
+library(corrplot)
+datos[,c(1,3,4,6)] |> cor() |> corrplot(method = "number")
+```
+```{r}
+
+```
+###3
+Construya un intervalo del 97.5% de confianza para la correlación entre la edad y el imc
+```{r}
+attach(datos)
+r <- cor(edad,imc)
+Zr <- 0.5*log((1+r)/(1-r)) 
+alfa <- 1-0.975 
+n <- length(edad)
+Zr - qnorm(1-alfa/2)*sqrt(1/(n-3)) -> Zrho_inf
+Zr + qnorm(1-alfa/2)*sqrt(1/(n-3)) -> Zrho_sup
+(exp(2*Zrho_inf)-1)/(exp(2*Zrho_inf)+1) -> rho_inf
+(exp(2*Zrho_sup)-1)/(exp(2*Zrho_sup)+1) -> rho_sup
+c(rho_inf,rho_sup)
+```
+```{r}
+
+cor.test(edad,imc, method = "pearson", alternative = "two.sided", conf.level = 0.975)
+
+```
+
+
+###4
+Pruebe si la correlación entre el imc y el número de hijos es significativamente distinta de cero. En caso lo sea, interprete su valor
+```{r}
+r <- cor(nhijos,imc)
+n <- length(nhijos)
+tcalc <- (r*sqrt(n-2)/sqrt(1-r^2))# Cálculo del estadístico-t
+```
+**Prueba de hipótesis** 
+
+Sobre el coeficiente de correlación poblacional (ρ).
+
+H0:ρ=0 ***
+
+H1:ρ≠0 
+
+El estadístico de prueba :
+
+$$\displaystyle t_c = \frac{r \sqrt{(n-2)}}{\sqrt{1-r^2}}\\$$
+
+```{r}
+2*pt(abs(tcalc),n-2,lower.tail = FALSE)
+```
+Intepretacion:
+
+###5
+Se desea estudiar la influencia lineal de la edad sobre los gastos. Presente el modelo de regresión lineal simple estimado.
+
+```{r}
+modelo <- lm(gastos ~ edad)
+library(broom)
+modelo <- modelo|> tidy()
+modelo
+```
+$$y=3.1880837+0.2811175x$$
+
+###6
+Verifique si se cumple la siguiente igualdad
+
+$$\hat{\beta}_1 = \frac{\sum^n_{i=1}(x_i - \overline{x})(y_i - \overline{y})}{\sum^n_{i=1}(x_i - \overline{x})^2} =\frac{Sy}{Sx}R$$
+```{r}
+b1 <- modelo$estimate[2];b1
+b1_ <- (sd(gastos)/sd(edad))*cor(gastos,edad);b1_
+round(b1)==round(b1_)
+```
+###7 
+Utilizando las fórmulas de error estándar, construya un intervalo del 92% de confianza para el intercepto y uno de 98% para la pendiente
+
+```{r}
+alfa <- 1-0.92
+n <- length(gastos)
+
+#Intervalo de confianza para el beta 0 con un nivel de confianza del 92%
+LI <- modelo$estimate[1]-qt(1-alfa/2,n-2)*modelo$std.error[1]
+LS <- modelo$estimate[1]+qt(1-alfa/2,n-2)*modelo$std.error[1]
+c(LI,LS)
+
+
+#Intervalo de confianza para el b1 con un nivel de confianza del 98%
+
+alfa <- 1-0.98
+n <- length(gastos)
+
+LI <- modelo$estimate[2]-qt(1-alfa/2,n-2)*modelo$std.error[2]
+LS <- modelo$estimate[2]+qt(1-alfa/2,n-2)*modelo$std.error[2]
+c(LI,LS)
+
+#Directamente con R:
+
+library(broom)
+modelo <- lm(gastos ~ edad)
+##Intervalo de confianza para el b1 y b0  con un nivel de confianza del 92%
+modelo|> confint(level = 0.92)
+##Intervalo de confianza para el b1 y b0  con un nivel de confianza del 98%
+modelo|> confint(level = 0.98)
+
+```
+###8
+Calcule las sumas de cuadrados para el análisis de varianza
+```{r}
+library(broom)
+modelo |>  aov()|> summary()
+
+```
+###9
+Presente el análisis de varianza, redacte sus conclusiones con un nivel de significancia del 5%
+
+H0:β1=0
+
+H1:β1≠0
+
+α=0.05
+
+pvalor = 2e-16
+
+Decisión: Se rechazar la hipótesis nula
+
+Existe suficiente evidencia estadística para indicar que existe una relación lineal de dependencia de los gastos en función a la edad.
+
+###10
+¿A cuánto asciende el valor estimado de σ²? ¿En qué unidades se encuentra establecida esta estimación?
+
+```{r}
+summary(modelo)$sigma**2 # varianza
+```
+###11
+
+Se desea estudiar la influencia lineal de las variables sobre los gastos. Presente el modelo de regresión lineal múltiple estimado.
+```{r}
+modelo2 <- lm(gastos ~ ., data = datos)  
+modelo2|> tidy()
+```
+
+$$y=-5.19529+0.26917x1-0.08941x2+0.25387137x3+0.34643049x4+3.27114117x5$$
+
+###12
+Interprete los coeficientes de regresión estimados
+b0 no tiene interpretacion
+
+b1 por cada año de edad que se incremente ,el gasto estimado se incrementa 0.26916527 manteniendo las demas variables en un mismo valor.
+
+b2 para el caso de personas de sexo masculino el gasto promedio es 0.08941 inferior que para el caso del sexo femenino manteniendo las demas variables en un mismo valor
+
+b3 por cada unidad que se incremente el imc ,el gasto estimado se incrementa 0.25387137 manteniendo las demas variables en un mismo valor.
+
+b4 por cada cada nhijo que se incremente ,el gasto estimado se incrementa 0.34643049 manteniendo las demas variables en un mismo valor.
+
+b5 para el caso de personas que si fuman  el gasto promedio es 3.27114117 superior que para el caso de personas que no fuman manteniendo las demas variables en un mismo valor.
+
+
+###13
+¿Qué sucedió con el valor del coeficiente de regresión de la edad cuando se trabajó
+```{r}
+#b1  Regreción lineal 
+modelo <- lm(gastos ~ edad)
+modelo <- modelo|> tidy()
+modelo$estimate[2]
+#b1 Regreción lineal multiple
+
+modelo2 <- lm(gastos ~ ., data = datos)
+modelo2 <- modelo2|> tidy()
+modelo2$estimate[2]
+```
+
+
