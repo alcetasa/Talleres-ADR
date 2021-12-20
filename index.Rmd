@@ -1,6 +1,6 @@
 ---
 title: "TALLERES"
-author: "AlvaroTauma"
+author: "Grupo J"
 date: "18 de diciembre de 2021"
 output: html_document
 ---
@@ -8,6 +8,16 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+##INTEGRANTES 
+
+Tauma Salvador, Alvaro Cesar	20181160
+
+Echandia Orihuela, Kelly Lidia	20191302
+
+Uriarte Zaga, Aron Salvad0r	20181161
+
+Romero Cuenca, Mary Carmen	20191312
+
 
 ##TALLER 1 
 
