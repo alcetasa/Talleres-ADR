@@ -1,24 +1,23 @@
 ---
-title: "TALLERES"
+title: "Taller2"
 author: "Grupo J"
-date: "UNALM-ANALISIS DE REGRESION LINEAL"
+date: "10 de Enero 2022"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-##INTEGRANTES 
 
-Tauma Salvador, Alvaro Cesar	20181160
 
-Echandia Orihuela, Kelly Lidia	20191302
+##INTEGRANTES
 
-Uriarte Zaga, Aron Salvad0r	20181161
+Tauma Salvador, Alvaro Cesar 20181160
 
-Romero Cuenca, Mary Carmen	20191312
+Echandia Orihuela, Kelly Lidia 20191302
 
-###TALLER 2
+Uriarte Zaga, Aron Salvad0r 20181161
+
+Romero Cuenca, Mary Carmen 20191312
+
+###TALLER2
 
 El archivo seguro.csv contiene datos referidos a pólizas de seguros adquiridas por 200 personas, de las cuales se registran los siguientes atributos:
 
@@ -40,7 +39,7 @@ El archivo seguro.csv contiene datos referidos a pólizas de seguros adquiridas 
 
 Copie cada una de las preguntas y desarróllelas en un formato Rmd, de modo que genere un archivo HTML
 
-###**0. Ejecute las siguientes tareas de preprocesamiento de datos, utilizando los códigos indicados en el recuadro inferior (requiere la carga previa de paquetes):**
+#**0. Ejecute las siguientes tareas de preprocesamiento de datos, utilizando los códigos indicados en el recuadro inferior (requiere la carga previa de paquetes):**
 
 
 
@@ -48,9 +47,9 @@ Copie cada una de las preguntas y desarróllelas en un formato Rmd, de modo que 
 ```{r eval=T,echo=T}
 library(tidyverse)
 ```
-**LECTURA DE DATOS**
+###LECTURA DE DATOS
 ```{r eval=T,echo=T}
-datos <- read_csv("Taller2/seguro.csv")
+datos <- read_csv("seguro.csv")
 ```
 
 
@@ -78,7 +77,7 @@ names(datos)
 attach(datos)
 ```
 
-###**1. Se desea estudiar la influencia lineal de las variables sobre los gastos. Obtenga la estimación puntual de los coeficientes de regresión:**
+#**1. Se desea estudiar la influencia lineal de las variables sobre los gastos. Obtenga la estimación puntual de los coeficientes de regresión:**
 
 $$\boldsymbol{\hat{\beta}}= \left(\textbf{X}'\textbf{X}\right)^{-1}\textbf{X}'\textbf{y}$$
 
@@ -123,14 +122,14 @@ modelo |> summary()
 
 $$\hat{y}=-5.19529+0.26917x1-0.08941x2+0.25387137x3+0.34643049x4+3.27114117x5$$
 
-###**2. Calcule, utilizando matrices, las sumas de cuadrados de regresión, de error y total.**
+#**2. Calcule, utilizando matrices, las sumas de cuadrados de regresión, de error y total.**
 
 ```{r}
 library(broom)
 modelo |> aov() |> summary()
 anva <- modelo |> anova();anva
 ```
-**SUMA DE CUADRADOS DEL TOTAL (SCT)**
+###Sumas de cuadrados del total (SCT)
 
 $$\text{SCT}= y^t(I_n-\frac{1}{n} J_n)y$$
 $$(I_n-\frac{1}{n} J_n)$$
@@ -155,6 +154,7 @@ J_n <- matrix(c(rep(1,n*n)),nrow = n, ncol = n)#J_n : matriz de puro 1s ,dim nxn
 ```{r eval=F}
 matrix(c(rep(1,n*n)),nrow = n, ncol = n)
 ```
+###SUMA DE CUADRADOS DEL TOTAL
 ```{r}
 
 SCT <- t(y)%*%(I_n-(1/n)*matrix(c(rep(1,n*n)),nrow = n, ncol = n))%*%y;SCT
@@ -164,7 +164,7 @@ SCT <- t(y)%*%(I_n-(1/n)*matrix(c(rep(1,n*n)),nrow = n, ncol = n))%*%y;SCT
 ```{r}
 SCT<-sum(anva[,2]);SCT
 ```
-**SUMA DE CUADRADOS DE LA REGRESION**
+###SUMA DE CUADRADOS DE LA REGRESION 
 
 $$\text{SCREG}= y^t(H_{n*n}-\frac{1}{n} J_n)y$$
 
@@ -179,7 +179,7 @@ dim(H)
 ```{r}
 SCREGRE <- t(y)%*%(H-(1/n)*J_n)%*%y;SCREGRE
 ```
-**SUMA DE CUADRADOS DEL ERROR**
+###SUMA DE CUADRADOS DEL ERROR
 
 $$\text{SCERROR}= y^t(I_{n*n}-H_n)y$$
 ```{r}
@@ -187,7 +187,7 @@ SCRERROR <- t(y)%*%(I_n-H)%*%y;SCRERROR
 anva[p+1,2]
 ```
 
-###**3. Obtenga la matriz de varianzas – covarianzas estimadas para el vector de coeficientes de regresión estimados:**
+#**3. Obtenga la matriz de varianzas – covarianzas estimadas para el vector de coeficientes de regresión estimados:**
 
 
 
@@ -204,7 +204,7 @@ summary(modelo)$sigma**2*solve(t(X)%*%X)
 vcov(modelo) 
 ```
 
-###**4.Muestre una elipse de 96% de confianza para las variables IMC y Número de hijos**
+#**4.Muestre una elipse de 96% de confianza para las variables IMC y Número de hijos**
 
 ```{r}
 library(car)
@@ -215,7 +215,7 @@ modelo |> confidenceEllipse(levels     = 0.96,
                             col        = "forestgreen")
 ```
 
-###**5. Escriba el cuadro ANVA, y pruebe la hipótesis de significancia de la regresión con un α = 0.05**
+#**5. Escriba el cuadro ANVA, y pruebe la hipótesis de significancia de la regresión con un α = 0.05**
 
 
 **a.** Utilice el criterio del pvalor
@@ -237,7 +237,7 @@ al modelo
 anva <- modelo |> anova();anva
 ```
 $$F_{calc}>F_{1-\alpha,k-1,n-k}$$
-**ANVA**
+###ANVA
 ```{r}
 k <- length(names(datos));k #numero de coeficientes de regresion betas coicide con el numero de varibales indp y dep (tener cuidado con el codigo!)
 n <- length(gastos);n # cantidad de valores de y
@@ -245,25 +245,25 @@ p <- length(names(datos))-1;p# 5variables indp y 1 indep
 
 ```
 
-**GRADOS DE LIBERTAD**
+###GRADOS DE LIBERTAD
 ```{r}
 GLREGRE <- k-1;GLREGRE
 GLERROR <- n-k;GLERROR
 GLTOTAL <- n-1;GLTOTAL
 ```
 
-**SUMA DE CUADRADOS**
+###SUMA DE CUADRADOS
 ```{r}
 SCREGRE
 SCRERROR
 SCT
 ```
-**CUADRADOS MEDIOS**
+###CUADRADOS MEDIOS
 ```{r}
 CMREGRE <- SCREGRE/GLREGRE;CMREGRE
 CMERROR <- SCRERROR/GLERROR;CMERROR
 ```
-**FCALCULADO**
+###FCALCULADO
 ```{r}
 FCALCULADO <- CMREGRE/CMERROR;FCALCULADO
 ```
@@ -276,13 +276,13 @@ FCALCULADO>Fcritico #SI ES CORRECTO H0 SE RECHAZA
 
 ```
 
-###**6. Plantee y desarrolle una prueba de hipótesis para una de las variables predictoras cuantitativas**
+#**6. Plantee y desarrolle una prueba de hipótesis para una de las variables predictoras cuantitativas**
 
 ```{r}
 modelo %>% summary()
 ```
 
-***Prueba de significancia de  regresión de la varible edad (b1)***
+###Prueba de significancia de  regresión de la varible edad (b1)
 
 $H_0:\beta_1=0$
 $H_1:\beta_1\neq0$
@@ -295,9 +295,9 @@ Rechaza HO
 Conclusion: Si hay contribucion de la varibale edad al modelo o si hay 
 efecto lineal de la variable sobre el modelo
 
-###**7.Plantee y desarrolle una prueba de hipótesis para una de las variables predictoras cualitativas.**
+#**7.Plantee y desarrolle una prueba de hipótesis para una de las variables predictoras cualitativas.**
 
-**Prueba de significancia de  regresión de la varible sexo (b2)**
+###Prueba de significancia de  regresión de la varible sexo (b2)
 
 $H_0:\beta_2=0$
 $H_1:\beta_2\neq0$
@@ -310,7 +310,7 @@ Conclusion: No hay contribucion de la varible sexo al modelo o si hay
 efecto lineal de la variable sobre el modelo
 
 
-###**8. Plantee una situación donde el punto evaluado para una predicción NO corresponda a una extrapolación**
+#**8. Plantee una situación donde el punto evaluado para una predicción NO corresponda a una extrapolación**
 
 $$\textbf{x}'\left(\textbf{X}'\textbf{X}\right)^{-1}\textbf{x} > h_{max},\qquad h_{max}=max(h_{11},...,h_{nn})$$
 
@@ -327,7 +327,7 @@ Notamos que en la verificacion de extrapolacion, la variable h max es mayor, as�
 Por lo tanto se recomienda hacer estimaciones, ya que la estimación 
 resultaria en nuestro rango de datos.
 
-###**9.Plantee una situación donde el punto evaluado para una predicción SÍ corresponda a una extrapolación**
+#**9.Plantee una situación donde el punto evaluado para una predicción SÍ corresponda a una extrapolación**
 
 $$\textbf{x}'\left(\textbf{X}'\textbf{X}\right)^{-1}\textbf{x} > h_{max},\qquad h_{max}=max(h_{11},...,h_{nn})$$
 
@@ -348,7 +348,7 @@ Por lo tanto, no se recomienda hacer estimaciones, ya que la estimación resulta
 fuera de nuestro rango de datos.
 
 
-###**10. Verifique si se cumple el supuesto de normalidad de errores**
+#**10. Verifique si se cumple el supuesto de normalidad de errores**
 ```{r}
 ################ NORMALIDAD ###############
 
@@ -414,7 +414,7 @@ PARA DECIR QUE LOS ERRORES PRESENTAN UNA DISTRIBUCION NORMAL"
 residuales |>  ks.test("pnorm")
 ```
 
-###**11.Verifique si se cumple el supuesto de homocedasticidad de errores**
+#**11.Verifique si se cumple el supuesto de homocedasticidad de errores**
 ```{r}
 ####################HOMOCEDASTICIDAD####################
 
@@ -474,7 +474,7 @@ modelo |> ols_test_breusch_pagan()
 PARA DECIR QUE HAY HOMOGENIDAD DE VARIANZAS"
 
 ```
-###**12. Verifique si se cumple el supuesto de independencia de errores**
+#**12. Verifique si se cumple el supuesto de independencia de errores**
 
 ```{r}
 ########################INDEPENDENCIA#######################
@@ -524,7 +524,7 @@ cada observación y la anterior. Si su valor está próximo
 a 2, entonces los residuos están incorreladas"
 
 ```
-###**13. Verifique si se cumple el supuesto de linealidad del modelo**
+#**13. Verifique si se cumple el supuesto de linealidad del modelo**
 
 ```{r}
 #####################LINEALIDAD#########################
@@ -563,232 +563,6 @@ modelo |> gvlma()
 
 
 
-#TALLER 1 
 
-El archivo seguro.csv contiene datos referidos a pólizas de seguros adquiridas por 200 personas, de las cuales se registran los siguientes atributos:
-
-
-- age: Edad de la persona
-- sex: Sexo de la persona
-- bmi: Índice de masa corporal
-- children: Número de hijos menores de 12 años
-- smoker: Indicador de hábito de fumar (0: No, 1: Sí)
-- region: Región de residencia de la persona
-- charges: Monto mensual que paga, en dólares
-
-
-**Lectura de datos:**
-```{r}
-datos <- read.csv("Taller1/seguro.csv",sep = ";")
-head(datos) 
-```
-
-
-
-```{r str, echo=T}
-str(datos)
-```
-###1 Ejecute las siguientes tareas de preprocesamiento de datos:
-
-
-
-a. Retire la columna region
-
-```{r}
-datos <- datos[-6]
-head(datos)
-```
-b. Renombre las columnas como edad,sexo, imc, nhijos, fuma, gastos
-```{r}
-names(datos) <- c("edad","sexo","imc","nhijos","fuma","gastos")
-head(datos)
-```
-c. Recodifique las categorías de la variable sexo como masculino y femenino, fuma: sí y no
-```{r}
-datos$sexo[datos$sexo=="female"] <-"femenino"
-datos$sexo[datos$sexo =="male"] <- "masculino"
-datos$fuma[datos$fuma=="yes"] <-"si"
-
-head(datos)
-```
-###2 Obtenga la matriz de correlaciones de las variables cuantitativas y presente un gráfico que permita visualizarla
-
-
-```{r}
-datos[,c(1,3,4,6)] |> cor()
-```
-
-```{r echo=TRUE,eval=TRUE}
-library(corrplot)
-datos[,c(1,3,4,6)] |> cor() |> corrplot(method = "number")
-```
-```{r}
-
-```
-###3 Construya un intervalo del 97.5% de confianza para la correlación entre la edad y el imc
-```{r}
-attach(datos)
-r <- cor(edad,imc)
-Zr <- 0.5*log((1+r)/(1-r)) 
-alfa <- 1-0.975 
-n <- length(edad)
-Zr - qnorm(1-alfa/2)*sqrt(1/(n-3)) -> Zrho_inf
-Zr + qnorm(1-alfa/2)*sqrt(1/(n-3)) -> Zrho_sup
-(exp(2*Zrho_inf)-1)/(exp(2*Zrho_inf)+1) -> rho_inf
-(exp(2*Zrho_sup)-1)/(exp(2*Zrho_sup)+1) -> rho_sup
-c(rho_inf,rho_sup)
-```
-```{r}
-
-cor.test(edad,imc, method = "pearson", alternative = "two.sided", conf.level = 0.975)
-
-```
-
-
-###4 Pruebe si la correlación entre el imc y el número de hijos es significativamente distinta de cero. En caso lo sea, interprete su valor
-```{r}
-r <- cor(nhijos,imc)
-n <- length(nhijos)
-tcalc <- (r*sqrt(n-2)/sqrt(1-r^2))# Cálculo del estadístico-t
-```
-**Prueba de hipótesis** 
-
-Sobre el coeficiente de correlación poblacional (ρ).
-
-H0:ρ=0 ***
-
-H1:ρ≠0 
-
-El estadístico de prueba :
-
-$$\displaystyle t_c = \frac{r \sqrt{(n-2)}}{\sqrt{1-r^2}}\\$$
-#Hallando el Pvalor
-```{r}
-2*pt(abs(tcalc),n-2,lower.tail = FALSE)
-```
-Intepretacion:
-No existe evidencia estadistica para afirmar que la correlacion es significativa.
-
-
-###5 Se desea estudiar la influencia lineal de la edad sobre los gastos. Presente el modelo de regresión lineal simple estimado.
-
-```{r}
-modelo <- lm(gastos ~ edad)
-library(broom)
-modelo <- modelo|> tidy()
-modelo
-```
-$$y=3.1880837+0.2811175x$$
-
-###6 Verifique si se cumple la siguiente igualdad
-
-$$\hat{\beta}_1 = \frac{\sum^n_{i=1}(x_i - \overline{x})(y_i - \overline{y})}{\sum^n_{i=1}(x_i - \overline{x})^2} =\frac{Sy}{Sx}R$$
-```{r}
-b1 <- modelo$estimate[2];b1
-b1_ <- (sd(gastos)/sd(edad))*cor(gastos,edad);b1_
-round(b1)==round(b1_)
-```
-###7  Utilizando las fórmulas de error estándar, construya un intervalo del 92% de confianza para el intercepto y uno de 98% para la pendiente
-
-```{r}
-alfa <- 1-0.92
-n <- length(gastos)
-
-#Intervalo de confianza para el beta 0 con un nivel de confianza del 92%
-LI <- modelo$estimate[1]-qt(1-alfa/2,n-2)*modelo$std.error[1]
-LS <- modelo$estimate[1]+qt(1-alfa/2,n-2)*modelo$std.error[1]
-c(LI,LS)
-
-
-#Intervalo de confianza para el b1 con un nivel de confianza del 98%
-
-alfa <- 1-0.98
-n <- length(gastos)
-
-LI <- modelo$estimate[2]-qt(1-alfa/2,n-2)*modelo$std.error[2]
-LS <- modelo$estimate[2]+qt(1-alfa/2,n-2)*modelo$std.error[2]
-c(LI,LS)
-
-#Directamente con R:
-
-library(broom)
-modelo <- lm(gastos ~ edad)
-##Intervalo de confianza para el b1 y b0  con un nivel de confianza del 92%
-modelo|> confint(level = 0.92)
-##Intervalo de confianza para el b1 y b0  con un nivel de confianza del 98%
-modelo|> confint(level = 0.98)
-
-```
-###8 Calcule las sumas de cuadrados para el análisis de varianza
-```{r}
-library(broom)
-modelo |>  aov()|> summary()
-
-```
-
-```{r}
-SCR <- (0.281^2)*var(edad)*(200-1);SCR
-SCT <- var(gastos)*(200-1);SCT
-SCE <- var(gastos)*(200-1)-(0.281^2)*var(edad)*(200-1);SCE #2
-```
-
-
-
-###9 Presente el análisis de varianza, redacte sus conclusiones con un nivel de significancia del 5%
-
-H0:β1=0
-
-H1:β1≠0
-
-α=0.05
-
-pvalor = 2e-16
-
-Decisión: Se rechazar la hipótesis nula
-
-Existe suficiente evidencia estadística para indicar que existe una relación lineal de dependencia de los gastos en función a la edad.
-
-###10 ¿A cuánto asciende el valor estimado de σ²? ¿En qué unidades se encuentra establecida esta estimación?
-
-```{r}
-summary(modelo)$sigma**2 # varianza
-```
-unidades:(miles de dolares^2)
-
-###11 Se desea estudiar la influencia lineal de las variables sobre los gastos. Presente el modelo de regresión lineal múltiple estimado.
-```{r}
-modelo2 <- lm(gastos ~ ., data = datos)  
-modelo2|> tidy()
-```
-
-$$y=-5.19529+0.26917x1-0.08941x2+0.25387137x3+0.34643049x4+3.27114117x5$$
-
-###12 Interprete los coeficientes de regresión estimados
-
-b0 no tiene interpretacion
-
-b1 por cada año de edad que se incremente ,el gasto estimado se incrementa 0.26916527 manteniendo las demas variables en un mismo valor.
-
-b2 para el caso de personas de sexo masculino el gasto promedio es 0.08941 inferior que para el caso del sexo femenino manteniendo las demas variables en un mismo valor
-
-b3 por cada unidad que se incremente el imc ,el gasto estimado se incrementa 0.25387137 manteniendo las demas variables en un mismo valor.
-
-b4 por cada cada nhijo que se incremente ,el gasto estimado se incrementa 0.34643049 manteniendo las demas variables en un mismo valor.
-
-b5 para el caso de personas que si fuman  el gasto promedio es 3.27114117 superior que para el caso de personas que no fuman manteniendo las demas variables en un mismo valor.
-
-
-  ###13 ¿Qué sucedió con el valor del coeficiente de regresión de la edad cuando se trabajó
-```{r}
-#b1  Regreción lineal 
-modelo <- lm(gastos ~ edad)
-modelo <- modelo|> tidy()
-modelo$estimate[2]
-#b1 Regreción lineal multiple
-
-modelo2 <- lm(gastos ~ ., data = datos)
-modelo2 <- modelo2|> tidy()
-modelo2$estimate[2]
-```
 
 
